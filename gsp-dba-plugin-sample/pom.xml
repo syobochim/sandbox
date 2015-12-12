@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.syobochim</groupId>
+  <artifactId>sample</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>jp.co.tis.gsp</groupId>
+        <artifactId>gsp-dba-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <!-- DBの情報を書いていく -->
+          <driver>org.postgresql.Driver</driver>
+          <url>jdbc:postgresql://localhost:5432/postgres</url>
+          <!-- ユーザは事前に作っておく -->
+          <adminUser>postgres</adminUser>
+          <adminPassword>postgres</adminPassword>
+          <user>postgres</user>
+          <password>postgres</password>
+          <!-- ここで指定したスキーマ名になる -->
+          <schema>sample</schema>
+
+          <!-- csvファイルの格納先パス。データを読み込むよ -->
+          <dataDirectory>src/test/resources/data</dataDirectory>
+          <!-- ER図の格納先 -->
+          <erdFile>src/main/resources/entity/data-model.edm</erdFile>
+          <lengthSemantics>CHAR</lengthSemantics>
+
+          <!-- Entityクラスはcom.syobochim.entityパッケージに出来る -->
+          <rootPackage>com.syobochim</rootPackage>
+          <entityPackageName>entity</entityPackageName>
+
+          <!-- Entityクラスにアクセサつけるかどうか -->
+          <useAccessor>true</useAccessor>
+
+          <!-- jarも出来るけど、javaファイルをどこに生成するか -->
+          <javaFileDestDir>target/generated-sources/entity</javaFileDestDir>
+        </configuration>
+        <dependencies>
+          <!-- プロジェクトで使用するDB製品にあわせたJDBCドライバに修正してください。 -->
+          <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4-1201-jdbc41</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <!--  DDLをObjectBrowserERから生成する  -->
+          <execution>
+            <id>generate-ddl</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-ddl</goal>
+            </goals>
+          </execution>
+          <!--  DDLを実行する  -->
+          <execution>
+            <id>execute-ddl</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>execute-ddl</goal>
+            </goals>
+          </execution>
+          <!--  Entityを生成する  -->
+          <execution>
+            <id>generate-entity</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-entity</goal>
+            </goals>
+          </execution>
+          <!--  データをロードする  -->
+          <execution>
+            <id>load-data</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>load-data</goal>
+            </goals>
+          </execution>
+          <!--  ダンプを作る  -->
+          <execution>
+            <id>export-schema</id>
+            <phase>install</phase>
+            <goals>
+              <goal>export-schema</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
