@@ -1,0 +1,55 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax:javaee-api:7.0'
+    archives 'fish.payara.extras:payara-micro:4.1.1.154'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+    }
+}
+
+war {
+    webAppDirName = 'web'
+    archiveName = 'doubleSubmit.war'
+}
+
+task copyMetaInfResources(type: Copy) {
+    from file('src/conf')
+    into new File(processResources.destinationDir, 'META-INF')
+}
+copyMetaInfResources.dependsOn processResources
+
+task rewritePersistenceXml << {
+    def file = new File(processResources.destinationDir, 'META-INF/persistence.xml')
+    def text = file.getText('UTF-8')
+    text = text.replaceAll('<jta-data-source>doubleSubmit</jta-data-source>', '<jta-data-source>jdbc/__default</jta-data-source>')
+    file.write(text, 'UTF-8')
+}
+rewritePersistenceXml.dependsOn copyMetaInfResources
+
+war.dependsOn rewritePersistenceXml
+
+task run(type:Exec) {
+    def payaraJar = configurations.archives.find { it.name ==~ /payara-micro.*/ }
+    def warFile = war.archivePath
+    commandLine 'java', '-jar', "$payaraJar", '--noCluster', '--deploy', "$warFile"
+}
+
+run.dependsOn war
