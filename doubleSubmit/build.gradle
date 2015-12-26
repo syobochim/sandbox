@@ -17,42 +17,9 @@ dependencies {
     archives 'fish.payara.extras:payara-micro:4.1.1.154'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src/java'
-        }
-    }
-}
-
 war {
-    webAppDirName = 'web'
     archiveName = 'doubleSubmit.war'
 }
-
-// src/confディレクトリの中身(persistence.xml)をWEB-INF/classes/META-INFにコピーする。
-task copyMetaInfResources(type: Copy) {
-    from file('src/conf')
-    into new File(processResources.destinationDir, 'META-INF')
-}
-// persistence.xmlのコピーはprocessResources(リソースのコピー)後に行う。
-copyMetaInfResources.dependsOn processResources
-
-// persistence.xmlを編集するタスク。
-// Payara MicroではDerbyがサーバーモードでは起動しないためデフォルトで用意されている
-// データソースを使う事にする。
-// そのため、このタスクで使用するデータソースのJNDI名を書き換えている。
-task rewritePersistenceXml << {
-    def file = new File(processResources.destinationDir, 'META-INF/persistence.xml')
-    def text = file.getText('UTF-8')
-    text = text.replaceAll('<jta-data-source>doubleSubmit</jta-data-source>', '<jta-data-source>jdbc/__default</jta-data-source>')
-    file.write(text, 'UTF-8')
-}
-// persistence.xmlの編集はWEB-INF/classes/META-INFへのコピー後に行う。
-rewritePersistenceXml.dependsOn copyMetaInfResources
-
-// WARファイルの作成はpersistence.xmlの編集後に行う。
-war.dependsOn rewritePersistenceXml
 
 // Payara Microで起動するタスク。
 // gradle runとすれば起動する。
