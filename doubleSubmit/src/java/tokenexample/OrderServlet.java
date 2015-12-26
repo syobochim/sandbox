@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.annotation.Resource;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -32,6 +35,9 @@ public class OrderServlet extends HttpServlet {
     @Inject
     private OrderService orderService;
     
+    @Resource
+    private ManagedExecutorService executor;
+
      // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -94,7 +100,7 @@ public class OrderServlet extends HttpServlet {
                         order.setItemCd(itemCd);
                         order.setToken(token.toString());
                         return orderService.register(order);
-                    }));
+                    }, executor));
                 } else {
                     throw new ServletException("トークンが一致しません");                    
                 }
