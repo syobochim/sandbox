@@ -5,7 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Set;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -53,6 +57,21 @@ public class NioSampleTest {
         // Verify
         assertThat(Files.readAllLines(Paths.get(path)), is(contains("hoge", "fuga")));
         Files.delete(Paths.get(path));
+    }
+
+    @Test
+    public void ファイルの権限を変更する() throws Exception {
+        Path path = Paths.get("input/permission-check.txt");
+        Files.createFile(path);
+        Set<PosixFilePermission> posixFilePermissions = Files.getPosixFilePermissions(path);
+        assertThat(PosixFilePermissions.toString(posixFilePermissions), is("rw-r--r--"));
+
+        NioSample.changePermission(path, "rwxrwxrw-");
+
+        Set<PosixFilePermission> actual = Files.getPosixFilePermissions(path);
+        assertThat(PosixFilePermissions.toString(actual), is("rwxrwxrw-"));
+
+        Files.delete(path);
     }
 
 }
