@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ class NioSample {
     }
 
     /**
-     * ファイルのんパーミッション情報を取得する
+     * ファイルのパーミッション情報を取得する
      *
      * @param path ファイルパス
      * @return ファイルパスの権限
@@ -60,6 +61,12 @@ class NioSample {
     static void changePermission(Path path, String permission) throws IOException {
         Set<PosixFilePermission> posixFilePermissions = PosixFilePermissions.fromString(permission);
         Files.setPosixFilePermissions(path, posixFilePermissions);
+    }
+
+    static void createFileSetPermission(Path path, String permission) throws IOException {
+        Set<PosixFilePermission> posixFilePermissions = PosixFilePermissions.fromString(permission);
+        FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(posixFilePermissions);
+        Files.createFile(path, attr);
     }
 
 }

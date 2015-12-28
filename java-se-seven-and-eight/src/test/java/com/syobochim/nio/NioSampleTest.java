@@ -11,8 +11,8 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Set;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * {@link NioSample}のテストクラス
@@ -61,7 +61,7 @@ public class NioSampleTest {
 
     @Test
     public void ファイルの権限を変更する() throws Exception {
-        Path path = Paths.get("input/permission-check.txt");
+        Path path = Paths.get("output/permission-check.txt");
         Files.createFile(path);
         Set<PosixFilePermission> posixFilePermissions = Files.getPosixFilePermissions(path);
         assertThat(PosixFilePermissions.toString(posixFilePermissions), is("rw-r--r--"));
@@ -70,7 +70,16 @@ public class NioSampleTest {
 
         Set<PosixFilePermission> actual = Files.getPosixFilePermissions(path);
         assertThat(PosixFilePermissions.toString(actual), is("rwxrwxrw-"));
+        Files.delete(path);
+    }
 
+    @Test
+    public void ファイル権限を指定してファイルを生成する() throws Exception {
+        Path path = Paths.get("output/new-file.txt");
+        NioSample.createFileSetPermission(path, "rwx------");
+
+        Set<PosixFilePermission> actual = Files.getPosixFilePermissions(path);
+        assertThat(PosixFilePermissions.toString(actual), is("rwx------"));
         Files.delete(path);
     }
 
