@@ -1,10 +1,8 @@
 package com.syobochim.nio;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -56,6 +54,7 @@ class NioSample {
      * @param path ファイルパス
      */
     static void changePermission(Path path, String permission) throws IOException {
+        // Visitorを定義
         Set<PosixFilePermission> posixFilePermissions = PosixFilePermissions.fromString(permission);
         Files.setPosixFilePermissions(path, posixFilePermissions);
     }
@@ -72,4 +71,69 @@ class NioSample {
         Files.createFile(path, attr);
     }
 
+    /**
+     * ファイルツリーを走査する。
+     *
+     * @param path 走査対象のディレクトリ
+     * @throws IOException
+     */
+    static void fileVisitorSample(Path path) throws IOException {
+        FileVisitor<Path> visitor = new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                System.out.println("pre visit directory : " + dir);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                System.out.println("visit file : " + file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                System.out.println("visit file failed : " + file);
+                return FileVisitResult.TERMINATE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                System.out.println("post visit directory : " + dir);
+                return FileVisitResult.CONTINUE;
+            }
+        };
+
+        Files.walkFileTree(path, visitor);
+    }
+
+    static void deleteDir(Path path) throws IOException {
+        FileVisitor<Path> visitor = new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                return FileVisitResult.TERMINATE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                if (!dir.equals(path)) {
+                    Files.delete(dir);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        };
+
+        Files.walkFileTree(path, visitor);
+    }
 }

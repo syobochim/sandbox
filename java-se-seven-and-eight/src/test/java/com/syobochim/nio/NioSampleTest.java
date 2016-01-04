@@ -83,4 +83,21 @@ public class NioSampleTest {
         Files.delete(path);
     }
 
+    @Test
+    public void デイlレクトリを走査する() throws Exception {
+        NioSample.createFile(Paths.get("output/new-file.txt"));
+        NioSample.createFile(Paths.get("output/sample.txt"));
+        Files.createDirectory(Paths.get("output/sub"));
+        NioSample.createFile(Paths.get("output/sub/sample.txt"));
+        Files.createDirectory(Paths.get("output/sub/sub2"));
+        NioSample.createFile(Paths.get("output/sub/sub2/sample.txt"));
+        NioSample.createFile(Paths.get("output/sub/sub2/sample2.txt"));
+
+        Path path = Paths.get("output");
+        NioSample.fileVisitorSample(path);
+
+        NioSample.deleteDir(path);
+
+    }
+
 }
