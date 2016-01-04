@@ -49,14 +49,14 @@ public class NioSampleTest {
     @Test
     public void 相対パスを渡すと新規ファイルが作成される() throws Exception {
         // SetUp
-        String path = "output/sample.txt";
+        Path path = Paths.get("output/sample.txt");
 
         // Execute
         NioSample.createFile(path);
 
         // Verify
-        assertThat(Files.readAllLines(Paths.get(path)), is(contains("hoge", "fuga")));
-        Files.delete(Paths.get(path));
+        assertThat(Files.readAllLines(path), is(contains("hoge", "fuga")));
+        Files.delete(path);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class NioSampleTest {
     @Test
     public void ファイル権限を指定してファイルを生成する() throws Exception {
         Path path = Paths.get("output/new-file.txt");
-        NioSample.createFileSetPermission(path, "rwx------");
+        NioSample.createFile(path, "rwx------");
 
         Set<PosixFilePermission> actual = Files.getPosixFilePermissions(path);
         assertThat(PosixFilePermissions.toString(actual), is("rwx------"));
