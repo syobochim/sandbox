@@ -61,7 +61,8 @@ class NioSample {
 
     /**
      * ファイルのパーミッションを指定してファイルを作成する。
-     * @param path ファイルパス
+     *
+     * @param path       ファイルパス
      * @param permission 権限
      * @throws IOException
      */
@@ -107,6 +108,12 @@ class NioSample {
         Files.walkFileTree(path, visitor);
     }
 
+    /**
+     * ディレクトリの中をサブディレクトリを含めて削除する。ただし、引数として受け取ったディレクトリ自体は削除しない。
+     *
+     * @param path ディレクトリ
+     * @throws IOException
+     */
     static void deleteDir(Path path) throws IOException {
         FileVisitor<Path> visitor = new FileVisitor<Path>() {
             @Override
