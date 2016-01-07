@@ -143,4 +143,35 @@ class NioSample {
 
         Files.walkFileTree(path, visitor);
     }
+
+    /**
+     * ディレクトリ配下のファイルをサブディレクトリを含めてコピーする
+     *
+     * @param sourceDirectory コピー元ディレクトリ
+     * @param destinationDirectory コピー先ディレクトリ
+     * @throws IOException
+     */
+    static void copyDir(Path sourceDirectory, Path destinationDirectory) throws IOException {
+
+        FileVisitor<Path> visitor = new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                // サブフォルダをコピー
+
+                // resolve メソッドにてパスを解消している。
+                // resolveは絶対パスは絶対パスのまま、相対パスはガッチャンコして絶対パスに変換してくれる！
+                Files.copy(dir, destinationDirectory.resolve(dir), StandardCopyOption.COPY_ATTRIBUTES);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                // ファイルをコピー
+                Files.copy(file, destinationDirectory.resolve(file), StandardCopyOption.COPY_ATTRIBUTES);
+                return FileVisitResult.CONTINUE;
+            }
+        };
+
+        Files.walkFileTree(sourceDirectory, visitor);
+    }
 }

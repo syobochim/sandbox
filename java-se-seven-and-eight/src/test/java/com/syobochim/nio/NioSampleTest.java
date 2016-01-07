@@ -97,7 +97,27 @@ public class NioSampleTest {
         NioSample.fileVisitorSample(path);
 
         NioSample.deleteDir(path);
+    }
 
+    @Test
+    public void ディレクトリ配下のファイルをコピーする() throws Exception {
+        NioSample.createFile(Paths.get("output/new-file.txt"));
+        NioSample.createFile(Paths.get("output/sample.txt"));
+        Files.createDirectory(Paths.get("output/sub"));
+        NioSample.createFile(Paths.get("output/sub/sample.txt"));
+        Files.createDirectory(Paths.get("output/sub/sub2"));
+        NioSample.createFile(Paths.get("output/sub/sub2/sample.txt"));
+        NioSample.createFile(Paths.get("output/sub/sub2/sample2.txt"));
+
+        Path path = Paths.get("output");
+
+        Path dest = Paths.get("dest");
+        Files.createDirectory(dest);
+        NioSample.copyDir(path, dest);
+        NioSample.fileVisitorSample(dest);
+
+        NioSample.deleteDir(path);
+        NioSample.deleteDir(dest);
     }
 
 }
