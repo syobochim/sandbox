@@ -1,7 +1,19 @@
 package com.syobochim.nio;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
@@ -147,7 +159,7 @@ class NioSample {
     /**
      * ディレクトリ配下のファイルをサブディレクトリを含めてコピーする
      *
-     * @param sourceDirectory コピー元ディレクトリ
+     * @param sourceDirectory      コピー元ディレクトリ
      * @param destinationDirectory コピー先ディレクトリ
      * @throws IOException
      */
@@ -173,5 +185,41 @@ class NioSample {
         };
 
         Files.walkFileTree(sourceDirectory, visitor);
+    }
+
+    static void watchDir(Path targetPath) throws IOException {
+        // WatchServiceはcloseしなきゃいけない
+        // サブディレクトリの監視は出来ないため、サブディレクトリを参照したい場合はサブディレクトリ用のWatchServiceが必要。
+        try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
+
+            // ディレクトリに対する監視対象の動作を定義する。
+            targetPath.register(watchService,
+                    StandardWatchEventKinds.ENTRY_CREATE,
+                    StandardWatchEventKinds.ENTRY_DELETE,
+                    StandardWatchEventKinds.ENTRY_MODIFY);
+
+            while (true) {
+                // takeメソッドでイベントが発生するまでブロックする。
+                // 現在発生しているkeyを取得
+                try {
+                    WatchKey key = watchService.take();
+                    for (WatchEvent<?> event : key.pollEvents()) {
+                        if (event.kind() == StandardWatchEventKinds.OVERFLOW) {
+                            key.reset();
+                            continue;
+                        } else {
+                            System.out.println(event.kind() + " " + event.context());
+                        }
+
+                        if (!key.reset()) {
+                            break;
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+
+        }
     }
 }

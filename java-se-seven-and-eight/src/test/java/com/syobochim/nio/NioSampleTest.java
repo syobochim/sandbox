@@ -2,11 +2,13 @@ package com.syobochim.nio;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.WatchService;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Set;
@@ -118,6 +120,13 @@ public class NioSampleTest {
 
         NioSample.deleteDir(path);
         NioSample.deleteDir(dest);
+    }
+
+    // TODO : こういう処理のテストってどうすればいいんだろう。
+    @Ignore
+    @Test
+    public void ディレクトリの操作を監視する() throws Exception {
+        NioSample.watchDir(Paths.get("output"));
     }
 
 }
