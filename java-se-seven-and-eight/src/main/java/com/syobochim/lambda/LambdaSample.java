@@ -25,6 +25,20 @@ class LambdaSample {
         y = 4;
         // final でない変数を使用することはできない。
 //        IntUnaryOperator func = x -> x * y;
+
+        final int z = 3;
+        // finalな変数は使用できる
+        IntUnaryOperator func2 = x -> x * z;
+
+        // finalな変数への再代入はできない
+/*        IntUnaryOperator func3 = x -> {
+            z += 10;
+            return x * z;
+        }*/
+
+        // 再代入されていないローカル変数をfinalとして扱うことができる。（実質的final）
+        int w = 3;
+        IntUnaryOperator func = x -> x * z;
     }
 
 }
