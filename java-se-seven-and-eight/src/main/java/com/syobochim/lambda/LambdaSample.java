@@ -20,6 +20,9 @@ class LambdaSample {
         return comparator.compare(x, y);
     }
 
+    /**
+     * 実質的finalについて
+     */
     public static void finalSample() {
         int y = 2;
         y = 4;
@@ -40,5 +43,6 @@ class LambdaSample {
         int w = 3;
         IntUnaryOperator func = x -> x * z;
     }
+
 
 }
