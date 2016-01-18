@@ -7,12 +7,12 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +20,14 @@ import java.util.List;
 /**
  * Add file comment.
  */
-@Mojo( name = "addComment", defaultPhase = LifecyclePhase.PROCESS_SOURCES )
-public class FileCommentMojo extends AbstractMojo{
+@Mojo(name = "addComment", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
+public class FileCommentMojo extends AbstractMojo {
 
-    @Parameter( property = "srcDir", required = true )
+    @Parameter(required = true)
     private File inputDir;
+
+    @Parameter(required = true)
+    private String comment;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         Path path = inputDir.toPath();
@@ -33,16 +36,23 @@ public class FileCommentMojo extends AbstractMojo{
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 List<String> fileComments = new ArrayList<>();
-                fileComments.add("/ *");
-                fileComments.add("  *");
-                fileComments.add("  */");
+                fileComments.add("/*");
+                fileComments.add(" * " + comment);
+                fileComments.add(" */");
 
                 List<String> lines = Files.readAllLines(file);
                 lines.addAll(0, fileComments);
 
-                Files.write(path, lines);
+                Files.write(file, lines);
                 return FileVisitResult.CONTINUE;
             }
         };
+
+        try {
+            Files.walkFileTree(path, visitor);
+        } catch (IOException e) {
+            getLog().error("This is error level, Maven will print this even if user uses -q option.");
+            e.printStackTrace();
+        }
     }
 }
