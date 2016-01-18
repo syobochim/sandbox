@@ -26,7 +26,7 @@ public class FileCommentMojoTest {
         File baseDir = resources.getBasedir("projects");
         File pom = new File(baseDir, "pom.xml");
 
-        Mojo mojo = mojoRule.lookupMojo("help", pom);
+        Mojo mojo = mojoRule.lookupMojo("addComment", pom);
         mojo.execute();
     }
 
