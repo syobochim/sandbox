@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Add file comment.
  */
-@Mojo( name = "touch", defaultPhase = LifecyclePhase.PROCESS_SOURCES )
+@Mojo( name = "addComment", defaultPhase = LifecyclePhase.PROCESS_SOURCES )
 public class FileCommentMojo extends AbstractMojo{
 
     @Parameter( property = "srcDir", required = true )
@@ -32,7 +32,7 @@ public class FileCommentMojo extends AbstractMojo{
         SimpleFileVisitor<Path> visitor = new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                List<String> fileComments = new ArrayList<String>();
+                List<String> fileComments = new ArrayList<>();
                 fileComments.add("/ *");
                 fileComments.add("  *");
                 fileComments.add("  */");
