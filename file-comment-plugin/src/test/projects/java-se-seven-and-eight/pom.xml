@@ -39,6 +39,7 @@
         <version>1.0-SNAPSHOT</version>
         <configuration>
           <inputDir>src/main/java</inputDir>
+          <comment>これはしょぼちむのプロジェクトだよ</comment>
         </configuration>
       </plugin>
     </plugins>
