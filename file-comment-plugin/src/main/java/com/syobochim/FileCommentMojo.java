@@ -32,18 +32,19 @@ public class FileCommentMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         Path path = inputDir.toPath();
 
+        List<String> fileComments = new ArrayList<>();
+        fileComments.add("/*");
+        fileComments.add(" * " + comment);
+        fileComments.add(" */");
+
         SimpleFileVisitor<Path> visitor = new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                List<String> fileComments = new ArrayList<>();
-                fileComments.add("/*");
-                fileComments.add(" * " + comment);
-                fileComments.add(" */");
-
                 List<String> lines = Files.readAllLines(file);
-                lines.addAll(0, fileComments);
-
-                Files.write(file, lines);
+                if (lines.get(0).contains("package")) {
+                    lines.addAll(0, fileComments);
+                    Files.write(file, lines);
+                }
                 return FileVisitResult.CONTINUE;
             }
         };
