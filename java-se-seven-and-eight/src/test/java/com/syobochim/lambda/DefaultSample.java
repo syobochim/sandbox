@@ -31,4 +31,5 @@ public class DefaultSample {
         Greeting greeting4 = new Hello() {};
         greeting4.sayTo("Java");
     }
+
 }

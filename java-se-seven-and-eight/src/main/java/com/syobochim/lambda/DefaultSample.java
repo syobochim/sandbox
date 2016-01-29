@@ -23,3 +23,21 @@ interface Hello extends Greeting {
         System.out.println("Hello, " + person + "!");
     }
 }
+
+interface Hi extends Greeting {
+    @Override
+    default void sayTo(String person){
+        System.out.println("Hi," + person + "!");
+    }
+}
+
+// 同じシグネチャのデフォルトメソッドを継承しているのでコンパイルエラー
+//class CasualGreeting implements Hello, Hi {}
+
+// 必ずオーバーライドする
+class CasualGreeting implements Hello, Hi {
+    @Override
+    public void sayTo(String person) {
+        System.out.println("Good Day, " + person + "!");
+    }
+}
