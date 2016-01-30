@@ -30,6 +30,14 @@ public class DefaultSample {
         // オーバーライドしたメソッドは通常のデフォルトメソッドをもつインターフェースと同様に使用出来る
         Greeting greeting4 = new Hello() {};
         greeting4.sayTo("Java");
+
+        // インターフェースと実装は実装が優先される。
+        Greeting greeting5 = new SampleGreeting();
+        greeting5.sayTo("Japan");
+
+        // superクラスでインターフェースを指定することができる。
+        Greeting greeting6 = new SuperGreeting();
+        greeting6.sayTo("Java");
     }
 
 }

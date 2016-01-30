@@ -31,6 +31,13 @@ interface Hi extends Greeting {
     }
 }
 
+class Hey implements Greeting {
+    @Override
+    public void sayTo(String person) {
+        System.out.println("Hey, " + person + "!");
+    }
+}
+
 // 同じシグネチャのデフォルトメソッドを継承しているのでコンパイルエラー
 //class CasualGreeting implements Hello, Hi {}
 
@@ -39,5 +46,15 @@ class CasualGreeting implements Hello, Hi {
     @Override
     public void sayTo(String person) {
         System.out.println("Good Day, " + person + "!");
+    }
+}
+
+// 実装とインターフェースでは、実装が優先される。
+class SampleGreeting extends Hey implements Hello {}
+
+class SuperGreeting implements Hello, Hi {
+    @Override
+    public void sayTo(String person) {
+        Hello.super.sayTo(person);
     }
 }
