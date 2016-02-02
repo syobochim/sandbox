@@ -90,3 +90,19 @@ static <T> Fuction<T, T> identity(){
 }
 ```
 
+# メソッド参照
+
+```java
+List<String> texts = ....;
+
+texts.forEach(text -> System.out.println(text));
+```
+
+ラムダ式にコールされるメソッドが１つなのであれば、ラムダ式を使わずに直接メソッドを指定することができる。
+
+```java
+List<String> texts = ....;
+
+texts.forEach(System.out::println);
+```
+
