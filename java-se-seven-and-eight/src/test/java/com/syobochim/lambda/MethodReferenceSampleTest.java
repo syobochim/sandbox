@@ -34,5 +34,7 @@ public class MethodReferenceSampleTest {
         // メソッド参照で書く
         BiConsumer<Integer, String> consumer2 = MethodReferenceSample2::print;
         consumer2.accept(10, "Hello Java");
+
+        // ちなみに、どちらのコードもオートボクシング・オートアンボクシングしてる
     }
 }
