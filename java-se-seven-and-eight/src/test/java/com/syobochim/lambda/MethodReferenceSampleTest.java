@@ -2,13 +2,12 @@ package com.syobochim.lambda;
 
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.Random;
+import java.util.function.*;
 
 /**
  * @author syobochim
@@ -83,4 +82,44 @@ public class MethodReferenceSampleTest {
         String result2 = func4.apply("Hello, ", "Java");
         System.out.println(result2);
     }
+
+    @Test
+    public void コンストラクタ参照() throws Exception {
+        // ラムダ式でオブジェクト生成
+        Supplier<Random> supplier1 = () -> new Random();
+        Random random1 = supplier1.get();
+
+        // コンストラクタ参照でオブジェクト生成
+        Supplier<Random> supplier2 = Random::new;
+        Random random2 = supplier2.get();
+
+        // ラムダ式でオブジェクト生成
+        // ダイヤモンド演算子を使用できる
+        Supplier<ArrayList<String>> supplier3 = () -> new ArrayList<>();
+        List<String> list1 = supplier3.get();
+
+        // コンストラクタ参照でオブジェクト生成
+        // ダイヤモンド演算子を使用できない
+        Supplier<ArrayList<String>> supplier4 = ArrayList<String>::new;
+        List<String> list2 = supplier4.get();
+
+        // コンストラクタに引数がある場合
+        // ラムダ式
+        BiFunction<String, Integer, BigInteger> func1 = (value, radix) -> new BigInteger(value, radix);
+        BigInteger number1 = func1.apply("1A", 16);
+
+        // コンストラクタ参照
+        BiFunction<String, Integer, BigInteger> func2 = BigInteger::new;
+        BigInteger number2 = func2.apply("FE", 16);
+
+        // 配列を生成する
+        // ラムダ式
+        IntFunction<String[]> func3 = (size) -> new String[size];
+        String[] texts1 = func3.apply(10);
+
+        // コンストラクタ参照
+        IntFunction<String[]> func4 = String[]::new;
+        String[] texts2 = func4.apply(10);
+    }
+
 }
