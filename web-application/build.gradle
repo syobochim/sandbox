@@ -21,12 +21,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.0-release-IJ143-78"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.2"
     }
 }
 
 apply plugin: 'kotlin'
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.0-release-IJ143-78"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.2"
 }
