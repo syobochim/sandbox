@@ -1,2 +1,9 @@
-sample
-text
+GET /index.html HTTP/1.1
+Host: localhost:80
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: ja,en-US;q=0.8,en;q=0.6
+Cookie: JSESSIONID=1dw1ydpk8scu9w07qbwx764cv

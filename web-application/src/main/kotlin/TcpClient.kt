@@ -9,7 +9,7 @@ import java.net.Socket
  */
 
 fun main(args: Array<String>) {
-    Socket("localhost", 8001).use { socket ->
+    Socket("localhost", 80).use { socket ->
 
         val output : OutputStream = socket.outputStream
         FileInputStream("./web-application/src/main/resources/client_send.txt").use { fileInput ->
@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
             }
         }
         // 終了を示すため、ゼロを送信
-        output.write(0)
+//        output.write(0)
 
         val input : InputStream = socket.inputStream
         FileOutputStream("./web-application/src/main/resources/client_recv.txt").use { fileOutput ->
