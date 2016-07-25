@@ -10,10 +10,12 @@ tasks.withType(JavaCompile) {
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'http://maven.seasar.org/maven2' }
 }
 
 dependencies {
     providedCompile 'javax:javaee-api:7.0'
+    compile 'org.thymeleaf:thymeleaf:3.0.1.RELEASE'
     archives 'fish.payara.extras:payara-micro:4.1.1.161.1'
 }
 
