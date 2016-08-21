@@ -1,15 +1,11 @@
 import org.junit.Test;
 
-import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-/**
- * @author syobochim
- */
 public class Lambda {
 
     @Test
