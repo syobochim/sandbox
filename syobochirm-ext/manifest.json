@@ -9,6 +9,7 @@
   },
   "permissions": [
     "http://terra.intra.tis.co.jp/*",
+    "https://script.google.com/*",
     "tabs"
   ],
 //  "options_page": "options.html",

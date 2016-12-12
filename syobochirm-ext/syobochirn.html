@@ -3,15 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>syobochirn</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="lib/jquery-3.1.1.min.js"></script>
+    <script src="lib/materialize.min.js"></script>
+    <script src="syobochirn.js"></script>
 </head>
 <body>
+<form action="api url"
+      method="post" target="_self">
 
-    <a class="waves-effect waves-light btn"><i class=t re"material-icons left">message</i>おしらせ</a>
-    <br>
-    <br>
-    <a class="waves-effect waves-light btn"><i class="material-icons left">today</i>とうろく</a>
+    <input type="hidden" name="date" value="Let`s study GoogleAppsScript!">
+
+    <button class="btn waves-effect waves-light" type="submit" name="action">
+        <i class="material-icons left">message</i>おしらせ
+    </button>
+</form>
+<br />
+<form action="api url"
+      method="post" target="_self">
+
+    <select name="event_schedule">   <!-- nameはこれにしないといけないルール -->
+        <option value="2013/12/01/09:00,2013/12/01/12:00">9:00~12:00</option>
+        <option value="2013/12/01/13:00,2013/12/01/16:00">13:00~16:00</option>
+        <option value="2013/12/01/16:30,2013/12/01/19:30">16:30~19:30</option>
+        <!-- valueは予定の開始日時、終了日時という順序で入力。new Dateできる書き方で -->
+    </select>
+
+    <button class="btn waves-effect waves-light" type="submit" name="action">
+        <i class="material-icons left">today</i>とうろく
+    </button>
+</form>
 </body>
 </html>
