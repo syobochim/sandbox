@@ -1,0 +1,20 @@
+{
+  "name": "syobochirmExt",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "社内スケジュールシステムをslackやGoogle Calendarと連携することが出来ます。",
+  "icons": {
+    "16": "images/syobochirn_16.png",
+    "128": "images/syobochirn_128.png"
+  },
+  "permissions": [
+    "http://terra.intra.tis.co.jp/*",
+    "tabs"
+  ],
+//  "options_page": "options.html",
+  "browser_action": {
+    "default_icon": "images/syobochirn_16.png",
+    "default_title": "syobochirm",
+    "default_popup": "syobochirn.html"
+  }
+}
