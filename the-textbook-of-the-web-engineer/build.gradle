@@ -7,6 +7,9 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+compileJava.dependsOn processResources
+processResources.destinationDir = compileJava.destinationDir
+
 repositories {
     jcenter()
     mavenCentral()
@@ -15,7 +18,7 @@ repositories {
 
 dependencies {
     providedCompile 'javax:javaee-api:7.0'
-    compile 'org.thymeleaf:thymeleaf:3.0.1.RELEASE'
+    compile 'org.thymeleaf:thymeleaf:3.0.0.RELEASE'
     archives 'fish.payara.extras:payara-micro:4.1.1.161.1'
 }
 
